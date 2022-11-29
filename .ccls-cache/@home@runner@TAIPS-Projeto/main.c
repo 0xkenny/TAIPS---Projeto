@@ -15,8 +15,9 @@ struct aeroplane {
 
 int main(void) {
   printf("Hello World\n");
+  printf("Hello")
 
-  return 0;
+      return 0;
 }
 
 // Ideias de como comecar i guess
