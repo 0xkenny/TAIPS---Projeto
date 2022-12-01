@@ -1,6 +1,5 @@
 #include "taips.h"
 #include <stdio.h>
-#include 
 
 int main(void) {
   srand(time(NULL));

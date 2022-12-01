@@ -20,3 +20,4 @@ struct passenger {
 int generateId() { return rand() % 900000000 + 99999999; }
 
 void menu() { printf("asd"); }
+
