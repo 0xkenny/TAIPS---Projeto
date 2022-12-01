@@ -19,6 +19,7 @@ int main() {
   // gotoxy(columns / 2, rows / 2);
 
   hideCursor();
+  adjustWindowSize();
   menu("TAIPS", options);
   menuArrow(position);
 
@@ -52,6 +53,7 @@ int main() {
     // Menu option
     switch (option) {
     case 11:
+      gotoxy(0, 30);
       exit(0);
       break;
 
