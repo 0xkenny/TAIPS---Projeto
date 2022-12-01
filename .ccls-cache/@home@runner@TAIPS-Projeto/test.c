@@ -2,29 +2,9 @@
 #include <stdlib.h>
 #include <windows.h>
 
-void gotoxy(int x, int y) {
-  COORD coord;
-  coord.X = x;
-  coord.Y = y;
-  SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), coord);
-}
-
-int getCoords(char c) {
-    CONSOLE_SCREEN_BUFFER_INFO csbi;
-    int columns, rows;
-
-    GetConsoleScreenBufferInfo(GetStdHandle(STD_OUTPUT_HANDLE), &csbi);
-    columns = csbi.srWindow.Right - csbi.srWindow.Left + 1;
-    rows = csbi.srWindow.Bottom - csbi.srWindow.Top + 1;
-
-    c = toupper(c);
-    if(c == 'C') return columns;
-    if(c == 'R') return rows;
-}
-
 void menu(char options[12][30]) {
 
-    // Top
+    // Top Menu Bar
     for(int i = 0; i < 45; i++) {
         if(i == 0) {
             printf("%c", 201);
@@ -35,23 +15,22 @@ void menu(char options[12][30]) {
         }
     }
 
-    // Left
+    // Left Menu Bar
     for(int i = 0; i < 15; i++) {
         gotoxy(0, i + 1);
         printf("%c", 186);
     }
 
-    // Right
+    // Right Menu Bar
     for(int i = 0; i < 15; i++) {
         gotoxy(44, i + 1);
         printf("%c", 186);
     }
 
-    // Down
+    // Down Menu Bar
     for(int i = 0; i < 45; i++) {
         if(i == 0) {
-            printf("\n");
-            printf("%c", 200);
+            printf("\n%c", 200);
         } else if(i == 44) {
             printf("%c", 188);
         } else {
@@ -59,7 +38,7 @@ void menu(char options[12][30]) {
         }
     }
 
-
+    // Options List
     for(int i = 0; i < 12; i++) {
         gotoxy(5, 2 + i + 1);
         printf("%s", options[i]);
@@ -78,18 +57,9 @@ void menuArrow(int position) {
     gotoxy(0, 20);
 }
 
-void hideCursor() {
-    HANDLE consoleHandle = GetStdHandle(STD_OUTPUT_HANDLE);
-    CONSOLE_CURSOR_INFO info;
-    info.dwSize = 100;
-    info.bVisible = FALSE;
-    SetConsoleCursorInfo(consoleHandle, &info);
-}
-
 int main() {
     int columns = getCoords('C'), rows = getCoords('R');
-    int position = 1;
-    int keyPressed = 0;
+    int position = 1, keyPressed = 0, option = 0;
 
     char options[12][30] = { "Aeroplane Details", "Aeroplane Status", "Listar Aeronaves Autorizacao", "List Aeroplanes", "Add Aeroplane", "Edit Aeroplane", "Delete Aeroplane", "Authorize Fligth", "Cancel Fligth", "Save Aeroplanes", "Quit" };
 
@@ -102,14 +72,33 @@ int main() {
     while(1) {
         keyPressed = getch();
 
-        if(keyPressed == 80 && position < 11) {
-            menuArrow(++position);
-        } else if(keyPressed == 72 && position > 1) {
-            menuArrow(--position);
-        } else {
-            position = position;
+        // Key Handler
+        switch(keyPressed) {
+            // Enter
+            case 13:
+                option = position;
+                break;
+
+            // Arrow Up
+            case 72:
+                if(position > 1) menuArrow(--position);
+                break;
+
+            // Arrow Down
+            case 80:
+                if(position < 11) menuArrow(++position);
+                break;
+
+            default:
+                position = position;
+                break;
+        }
+
+        // Menu option
+        switch(option) {
+            case 11:
+                exit(0);
+                break;
         }
     }
-
-    gotoxy(20, 20);
 }
