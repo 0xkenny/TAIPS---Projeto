@@ -2,7 +2,6 @@
 #include <stdlib.h>
 #include <windows.h>
 
-
 void gotoxy(int x, int y) {
   COORD coord;
   coord.X = x;
@@ -68,6 +67,7 @@ void menu(char options[12][30]) {
 }
 
 void menuArrow(int position) {
+    // Clear arrow
     for(int i = 0; i < 12; i++) {
         gotoxy(3, 2 + i + 1);
         printf(" ");
@@ -75,41 +75,41 @@ void menuArrow(int position) {
 
     gotoxy(3, 2 + position);
     printf(">");
+    gotoxy(0, 20);
+}
+
+void hideCursor() {
+    HANDLE consoleHandle = GetStdHandle(STD_OUTPUT_HANDLE);
+    CONSOLE_CURSOR_INFO info;
+    info.dwSize = 100;
+    info.bVisible = FALSE;
+    SetConsoleCursorInfo(consoleHandle, &info);
 }
 
 int main() {
-    int columns = getCoords('C');
-    int rows = getCoords('R');
-    int keyPressed = 0;
+    int columns = getCoords('C'), rows = getCoords('R');
     int position = 1;
-    int opc = 0;
+    int keyPressed = 0;
 
     char options[12][30] = { "Aeroplane Details", "Aeroplane Status", "Listar Aeronaves Autorizacao", "List Aeroplanes", "Add Aeroplane", "Edit Aeroplane", "Delete Aeroplane", "Authorize Fligth", "Cancel Fligth", "Save Aeroplanes", "Quit" };
 
     //gotoxy(columns / 2, rows / 2);
 
+    hideCursor();
     menu(options);
     menuArrow(position);
 
-    if(getch() == 80 && position < 12) {
-        position++;
-        menuArrow(position);
-    } else if(getch() == 72 > 1) {
-        position--;
-        menuArrow(position);
-    } else {
-        position = position;
+    while(1) {
+        keyPressed = getch();
+
+        if(keyPressed == 80 && position < 11) {
+            menuArrow(++position);
+        } else if(keyPressed == 72 && position > 1) {
+            menuArrow(--position);
+        } else {
+            position = position;
+        }
     }
 
     gotoxy(20, 20);
-
-
-    switch(opc) {
-    case 0:
-        break;
-
-    case 1:
-        return 0;
-        break;
-    }
 }
