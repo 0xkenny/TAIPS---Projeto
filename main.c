@@ -58,8 +58,6 @@ int main() {
       break;
 
     default:
-      srand(time(NULL));
-
       Aeroplane aero;
 
       aero.id = generateId();

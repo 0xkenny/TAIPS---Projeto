@@ -31,7 +31,10 @@ typedef struct Passengers {
   char name[30]; // Name
 } Passenger;
 
-int generateId() { return rand() % 900000000 + 99999999; }
+int generateId() {
+  srand(time(NULL));
+  return rand() % 900000000 + 99999999;
+}
 
 void adjustWindowSize() {
   struct SMALL_RECT window;
